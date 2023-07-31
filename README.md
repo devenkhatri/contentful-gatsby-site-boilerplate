@@ -90,7 +90,7 @@ For custom components, you can find the instructions at our [guide](https://www.
 
 e.g. 
 ```html
-https://contentful-nextjs-site-boilerplate.netlify.app/{entry.fields.slug}?preview=1&domain=contentful.com&space_id=<<your space id>&delivery_token=<<your delivery api token>>&preview_token=<<your preview api token>>
+https://contentful-gatsbyjs-site-boilerplate.netlify.app/{entry.fields.slug}?preview=1&domain=contentful.com&space_id=<<your space id>&delivery_token=<<your delivery api token>>&preview_token=<<your preview api token>>
 ```
 
 ## What's included?
