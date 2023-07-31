@@ -1,8 +1,4 @@
-<a href="https://www.gatsbyjs.com">
-  <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-</a>
-
-# Gatsby Starter Contentful Homepage
+# Contentful Gatsby Site Boilerplate
 
 Create a homepage using Gatsby and Contentful. This starter demonstrates how to use Contentful to build a homepage and can be customized to match your own visual branding.
 
@@ -81,14 +77,21 @@ Otherwise, you can always set up your content in Contentful manually before depl
 
 [![Deploy to Gatsby](https://www.gatsbyjs.com/deploynow.svg "Deploy to Gatsby")](https://www.gatsbyjs.com/dashboard/deploynow?url=https://github.com/gatsbyjs/gatsby-starter-contentful-homepage)
 
-## Setting up Gatsby Cloud Preview
+## Setting up Live Content Preview
 
-To use Gatsby Cloud Preview with this site, see the documentation for
-[Installing Content Sync for Contentful][].
+Once you have the Starter Template deployed on your hosting provider, you can update the Content preview URL in your
+space settings.
 
-[installing content sync for contentful]: https://support.gatsbyjs.com/hc/en-us/articles/4410371995539-Installing-Content-Sync-for-Contentful
-[add the gatsby cloud app to contentful]: https://support.gatsbyjs.com/hc/en-us/articles/360056047134-Add-the-Gatsby-Cloud-App-to-Contentful
-[connecting to contentful manually]: https://support.gatsbyjs.com/hc/en-us/articles/360052076554-Connecting-to-Contentful-Manually
+You can follow our guide to learn how to do
+so: [https://www.contentful.com/help/setup-content-preview](https://www.contentful.com/help/setup-content-preview/?utm_source=github.com-preview-guide&utm_medium=referral&utm_campaign=template-marketing-webapp-nextjs).
+
+For the live preview the basic field tagging for the inspector mode and live updates are already implemented.
+For custom components, you can find the instructions at our [guide](https://www.contentful.com/developers/docs/tutorials/general/live-preview/).
+
+e.g. 
+```html
+https://contentful-nextjs-site-boilerplate.netlify.app/{entry.fields.slug}?preview=1&domain=contentful.com&space_id=<<your space id>&delivery_token=<<your delivery api token>>&preview_token=<<your preview api token>>
+```
 
 ## What's included?
 
