@@ -341,35 +341,28 @@ exports.createSchemaCustomization = async ({ actions }) => {
       links: [HomepageLink] @link(from: "links___NODE")
     }
 
-    interface Image implements Node {
-      id: ID!
-      alt: String
-      gatsbyImageData: GatsbyImageData @imagePassthroughArgs
-      url: String
-    }
-
-    interface BlogAuthor implements Node {
+    interface Author implements Node {
       id: ID!
       name: String
-      avatar: Image
+      avatar: HomepageImage
     }
 
     interface BlogPost implements Node {
       id: ID!
       slug: String!
-      title: String!
-      html: String!
-      excerpt: String!
-      image: Image
-      date: Date! @dateformat
-      author: BlogAuthor
+      title: String
+      html: String
+      excerpt: String
+      image: HomepageImage
+      date: Date @dateformat
+      author: Author
       category: String
     }
 
-    type ContentfulBlogAuthor implements Node & BlogAuthor {
+    type ContentfulAuthor implements Node & Author {
       id: ID!
       name: String
-      avatar: Image @link(from: "avatar___NODE")
+      avatar: HomepageImage @link(from: "image___NODE")
     }
 
     type contentfulBlogPostExcerptTextNode implements Node {
@@ -381,15 +374,15 @@ exports.createSchemaCustomization = async ({ actions }) => {
     type ContentfulBlogPost implements Node & BlogPost {
       id: ID!
       slug: String!
-      title: String!
-      html: String! @richText
-      body: String!
-      date: Date! @dateformat
+      title: String
+      html: String @richText
+      body: String
+      date: Date @dateformat
       excerpt: String! @contentfulExcerpt
       contentfulExcerpt: contentfulBlogPostExcerptTextNode
         @link(from: "excerpt___NODE")
-      image: Image @link(from: "image___NODE")
-      author: BlogAuthor @link(from: "author___NODE")
+      image: HomepageImage @link(from: "image___NODE")
+      author: Author @link(from: "author___NODE")
       category: String
     }
 
@@ -647,14 +640,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   if (posts.length < 1) return
 
   // Define the template for blog post
-  const blogIndex = path.resolve(`./src/templates/blog-index.js`)
   const blogPost = path.resolve(`./src/templates/blog-post.js`)
-
-  actions.createPage({
-    path: "/blog/",
-    component: blogIndex,
-    context: {},
-  })
 
   posts.forEach((post, i) => {
     const previous = posts[i - 1]?.slug

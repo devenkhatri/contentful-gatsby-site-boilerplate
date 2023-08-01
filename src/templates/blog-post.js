@@ -15,49 +15,53 @@ import { avatar as avatarStyle } from "../components/ui.css"
 import * as styles from "./blog-post.css"
 import SEOHead from "../components/head"
 
-export default function BlogPost(props) {
+export default function BlogPost({ data }) {
+  const post = data.post;
+  console.log("***** blog post", post)
   return (
     <Layout>
       <Container>
         <Box paddingY={5}>
           <Heading as="h1" center>
-            {props.title}
+            {post.title}
           </Heading>
           <Space size={4} />
-          {props.author && (
+          {post.author && (
             <Box center>
               <Flex>
-                {props.author.avatar &&
-                  (!!props.author.avatar.gatsbyImageData ? (
+                {post.author.avatar &&
+                  (!!post.author.avatar.gatsbyImageData ? (
                     <Avatar
-                      {...props.author.avatar}
-                      image={props.author.avatar.gatsbyImageData}
+                      {...post.author.avatar}
+                      image={post.author.avatar.gatsbyImageData}
                     />
                   ) : (
                     <img
-                      src={props.author.avatar.url}
-                      alt={props.author.name}
+                      src={post.author.avatar.url}
+                      alt={post.author.name}
                       className={avatarStyle}
                     />
                   ))}
-                <Text variant="bold">{props.author.name}</Text>
+                <Text variant="bold">{post.author.name}</Text>
               </Flex>
             </Box>
           )}
           <Space size={4} />
-          <Text center>{props.date}</Text>
+          <Text center>{post.date}</Text>
           <Space size={4} />
-          {props.image && (
-            <GatsbyImage
-              alt={props.image.alt}
-              image={props.image.gatsbyImageData}
-            />
+          {post.image && (
+            <Text center>
+              <GatsbyImage
+                alt={post.image.alt}
+                image={post.image.gatsbyImageData}
+              />
+            </Text>
           )}
           <Space size={5} />
           <div
             className={styles.blogPost}
             dangerouslySetInnerHTML={{
-              __html: props.html,
+              __html: post.html,
             }}
           />
         </Box>
@@ -65,25 +69,35 @@ export default function BlogPost(props) {
     </Layout>
   )
 }
-export const Head = (props) => {
-  return <SEOHead {...props} description={props.excerpt} />
+export const Head = ({ data }) => {
+  return <SEOHead {...data.post} description={data.post.excerpt} />
 }
 
 export const query = graphql`
-  query ($id: String!) {
-    contentfulBlogPost(id: { eq: $id }) {
+  query ( $id: String! ) {
+    post: contentfulBlogPost(id: { eq: $id }) {
       id
       slug
       title
       html
       excerpt
-      date
+      date(formatString: "MMMM DD, YYYY")
+      category
       image {
         id
         url
         gatsbyImageData
         alt
       }
+      author {
+        name
+        avatar {
+          id
+          url
+          gatsbyImageData
+          alt
+        }
+      }      
     }
   }
 `

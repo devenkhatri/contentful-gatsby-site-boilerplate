@@ -55,7 +55,9 @@ function PostCardSmall({ slug, image, title, category, ...props }) {
   )
 }
 
-export default function BlogIndex({ posts }) {
+const BlogIndex = ({ data }) => {
+  const posts = data.posts.nodes || [];
+  console.log("***** posts", posts)
   const featuredPosts = posts.filter((p) => p.category === "Featured")
   const regularPosts = posts.filter((p) => p.category !== "Featured")
 
@@ -72,16 +74,18 @@ export default function BlogIndex({ posts }) {
             ))}
           </FlexList>
         </Box>
-        <Box paddingY={4}>
-          <Subhead>Product Updates</Subhead>
-          <FlexList responsive wrap gap={0} gutter={3} variant="start">
-            {regularPosts.map((post) => (
-              <Box as="li" key={post.id} padding={3} width="third">
-                <PostCardSmall {...post} />
-              </Box>
-            ))}
-          </FlexList>
-        </Box>
+        {regularPosts && regularPosts.length > 0 &&
+          <Box paddingY={4}>
+            <Subhead>Blog Updates</Subhead>
+            <FlexList responsive wrap gap={0} gutter={3} variant="start">
+              {regularPosts.map((post) => (
+                <Box as="li" key={post.id} padding={3} width="third">
+                  <PostCardSmall {...post} />
+                </Box>
+              ))}
+            </FlexList>
+          </Box>
+        }
       </Container>
     </Layout>
   )
@@ -90,19 +94,31 @@ export const Head = () => {
   return <SEOHead title="Blog" />
 }
 
+export default BlogIndex
+
 export const query = graphql`
   query {
-    allContentfulBlogPost {
+    posts: allContentfulBlogPost {
       nodes {
         id
         slug
         title
         excerpt
+        category
         image {
           id
           alt
           gatsbyImageData
         }
+        author {
+          name
+          avatar {
+            id
+            url
+            gatsbyImageData
+            alt
+          }
+        } 
       }
     }
   }
