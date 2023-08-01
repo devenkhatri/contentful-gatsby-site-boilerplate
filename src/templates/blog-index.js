@@ -1,5 +1,6 @@
 import * as React from "react"
 import { GatsbyImage } from "gatsby-plugin-image"
+import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import {
   Container,
@@ -88,3 +89,21 @@ export default function BlogIndex({ posts }) {
 export const Head = () => {
   return <SEOHead title="Blog" />
 }
+
+export const query = graphql`
+  query {
+    allContentfulBlogPost {
+      nodes {
+        id
+        slug
+        title
+        excerpt
+        image {
+          id
+          alt
+          gatsbyImageData
+        }
+      }
+    }
+  }
+`

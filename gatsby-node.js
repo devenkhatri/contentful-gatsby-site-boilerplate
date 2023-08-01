@@ -1,3 +1,4 @@
+const path = require(`path`)
 const { documentToHtmlString } = require("@contentful/rich-text-html-renderer")
 const { getGatsbyImageResolver } = require("gatsby-plugin-image/graphql-utils")
 
@@ -70,6 +71,22 @@ exports.createSchemaCustomization = async ({ actions }) => {
           const doc = JSON.parse(body.raw)
           const html = documentToHtmlString(doc)
           return html
+        },
+      }
+    },
+  })
+
+  actions.createFieldExtension({
+    name: "contentfulExcerpt",
+    extend(options) {
+      return {
+        async resolve(source, args, context, info) {
+          const type = info.schema.getType(source.internal.type)
+          const resolver = type.getFields().contentfulExcerpt?.resolve
+          const result = await resolver(source, args, context, {
+            fieldName: "contentfulExcerpt",
+          })
+          return result.excerpt
         },
       }
     },
@@ -324,6 +341,58 @@ exports.createSchemaCustomization = async ({ actions }) => {
       links: [HomepageLink] @link(from: "links___NODE")
     }
 
+    interface Image implements Node {
+      id: ID!
+      alt: String
+      gatsbyImageData: GatsbyImageData @imagePassthroughArgs
+      url: String
+    }
+
+    interface BlogAuthor implements Node {
+      id: ID!
+      name: String
+      avatar: Image
+    }
+
+    interface BlogPost implements Node {
+      id: ID!
+      slug: String!
+      title: String!
+      html: String!
+      excerpt: String!
+      image: Image
+      date: Date! @dateformat
+      author: BlogAuthor
+      category: String
+    }
+
+    type ContentfulBlogAuthor implements Node & BlogAuthor {
+      id: ID!
+      name: String
+      avatar: Image @link(from: "avatar___NODE")
+    }
+
+    type contentfulBlogPostExcerptTextNode implements Node {
+      id: ID!
+      excerpt: String!
+      # determine if markdown is required for this field type
+    }
+
+    type ContentfulBlogPost implements Node & BlogPost {
+      id: ID!
+      slug: String!
+      title: String!
+      html: String! @richText
+      body: String!
+      date: Date! @dateformat
+      excerpt: String! @contentfulExcerpt
+      contentfulExcerpt: contentfulBlogPostExcerptTextNode
+        @link(from: "excerpt___NODE")
+      image: Image @link(from: "image___NODE")
+      author: BlogAuthor @link(from: "author___NODE")
+      category: String
+    }
+
   `)
 
   // CMS-specific types for Homepage
@@ -542,7 +611,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
   `)
 }
 
-exports.createPages = ({ actions }) => {
+exports.createPages = async ({ actions, graphql, reporter }) => {
   const { createSlice } = actions
   createSlice({
     id: "header",
@@ -552,5 +621,54 @@ exports.createPages = ({ actions }) => {
     id: "footer",
     component: require.resolve("./src/components/footer.js"),
   })
+
+  //blog pages
+  const result = await graphql(`
+    {
+      posts: allContentfulBlogPost {
+        nodes {
+          id
+          slug
+        }
+      }
+    }
+  `)
+
+  if (result.errors) {
+    reporter.panicOnBuild(
+      `There was an error loading your blog posts from Contentful`,
+      result.errors
+    )
+    return
+  }
+
+  const posts = result.data.posts.nodes
+
+  if (posts.length < 1) return
+
+  // Define the template for blog post
+  const blogIndex = path.resolve(`./src/templates/blog-index.js`)
+  const blogPost = path.resolve(`./src/templates/blog-post.js`)
+
+  actions.createPage({
+    path: "/blog/",
+    component: blogIndex,
+    context: {},
+  })
+
+  posts.forEach((post, i) => {
+    const previous = posts[i - 1]?.slug
+    const next = posts[i + 1]?.slug
+
+    actions.createPage({
+      path: `/blog/${post.slug}`,
+      component: blogPost,
+      context: {
+        id: post.id,
+        slug: post.slug,
+        previous,
+        next,
+      },
+    })
+  })
 }
-      
