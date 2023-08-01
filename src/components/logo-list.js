@@ -1,5 +1,4 @@
 import * as React from "react"
-import { graphql } from "gatsby"
 import { Space, Container, Section, FlexList, Text, Logo } from "./ui"
 
 export function LogoItem(props) {
@@ -21,7 +20,7 @@ export default function LogoList(props) {
         )}
         <Space size={4} />
         <FlexList gap={4} variant="center">
-          {props.logos.map(
+          {props.content && props.content.map(
             (logo) =>
               logo && (
                 <li key={logo.id}>
@@ -34,19 +33,3 @@ export default function LogoList(props) {
     </Section>
   )
 }
-
-export const query = graphql`
-  fragment HomepageLogoListContent on HomepageLogoList {
-    id
-    text
-    logos {
-      id
-      alt
-      image {
-        id
-        gatsbyImageData
-        alt
-      }
-    }
-  }
-`

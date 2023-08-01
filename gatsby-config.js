@@ -21,6 +21,7 @@ module.exports = {
         host: process.env.CONTENTFUL_HOST,
       },
     },
+    // "gatsby-theme-contentful-blog",
     "gatsby-plugin-sharp",
     "gatsby-plugin-image",
     "gatsby-transformer-sharp",

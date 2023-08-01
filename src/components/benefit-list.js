@@ -1,5 +1,4 @@
 import * as React from "react"
-import { graphql } from "gatsby"
 import {
   Container,
   Section,
@@ -38,7 +37,7 @@ export default function BenefitList(props) {
         </Box>
         <Space size={3} />
         <FlexList gutter={3} variant="start" responsive wrap>
-          {props.content.map((benefit) => (
+          {props.content && props.content.map((benefit) => (
             <Benefit key={benefit.id} {...benefit} />
           ))}
         </FlexList>
@@ -46,21 +45,3 @@ export default function BenefitList(props) {
     </Section>
   )
 }
-
-export const query = graphql`
-  fragment HomepageBenefitListContent on HomepageBenefitList {
-    id
-    heading
-    text
-    content {
-      id
-      heading
-      text
-      image {
-        id
-        gatsbyImageData
-        alt
-      }
-    }
-  }
-`

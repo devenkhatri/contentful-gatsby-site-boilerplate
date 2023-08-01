@@ -2,7 +2,7 @@
 
 Create a homepage using Gatsby and Contentful. This starter demonstrates how to use Contentful to build a homepage and can be customized to match your own visual branding.
 
-[View the Demo](https://gatsbycontentfulhomepage.gatsbyjs.io/)
+[View the Demo](https://contentful-gatsbyjs-site-boilerplate.netlify.app/)
 
 **Note:**
 This version of the Contentful homepage starter is written in JavaScript. If you want to use Contentful but TypeScript is more your style, there is also a TypeScript version maintained on [GitHub](https://github.com/gatsbyjs/gatsby-starter-contentful-homepage-ts).

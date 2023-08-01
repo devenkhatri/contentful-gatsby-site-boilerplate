@@ -7,7 +7,7 @@ import SEOHead from "../components/head"
 
 export default function Homepage(props) {
   const { homepage } = props.data
-
+  console.log("******** homepage", homepage)
   return (
     <Layout>
       {homepage.blocks.map((block) => {
@@ -35,14 +35,9 @@ export const query = graphql`
       blocks: content {
         id
         blocktype
+        ...PageSectionContent
         ...HomepageHeroContent
-        ...HomepageFeatureListContent
         ...HomepageCtaContent
-        ...HomepageLogoListContent
-        ...HomepageTestimonialListContent
-        ...HomepageBenefitListContent
-        ...HomepageStatListContent
-        ...HomepageProductListContent
       }
     }
   }

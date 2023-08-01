@@ -1,5 +1,4 @@
 import * as React from "react"
-import { graphql } from "gatsby"
 import {
   Container,
   Section,
@@ -44,7 +43,7 @@ export default function TestimonialList(props) {
           </Heading>
         </Box>
         <FlexList gutter={3} variant="start" responsive wrap>
-          {props.content.map((testimonial, index) => (
+          {props.content && props.content.map((testimonial, index) => (
             <Box as="li" key={testimonial.id + index} width="half" padding={3}>
               <Testimonial {...testimonial} />
             </Box>
@@ -54,21 +53,3 @@ export default function TestimonialList(props) {
     </Section>
   )
 }
-
-export const query = graphql`
-  fragment HomepageTestimonialListContent on HomepageTestimonialList {
-    id
-    kicker
-    heading
-    content {
-      id
-      quote
-      source
-      avatar {
-        id
-        gatsbyImageData
-        alt
-      }
-    }
-  }
-`

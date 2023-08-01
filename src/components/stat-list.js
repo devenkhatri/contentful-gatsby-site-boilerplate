@@ -1,5 +1,4 @@
 import * as React from "react"
-import { graphql } from "gatsby"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 import {
   Container,
@@ -39,7 +38,7 @@ export default function StatList(props) {
             </Heading>
             {props.text && <Text variant="lead">{props.text}</Text>}
             <FlexList wrap gap={4}>
-              {props.content.map((stat) => (
+              {props.content && props.content.map((stat) => (
                 <li key={stat.id}>
                   <Stat {...stat} />
                 </li>
@@ -62,33 +61,3 @@ export default function StatList(props) {
     </Container>
   )
 }
-
-export const query = graphql`
-  fragment HomepageStatListContent on HomepageStatList {
-    id
-    kicker
-    heading
-    text
-    image {
-      id
-      alt
-      gatsbyImageData
-    }
-    icon {
-      id
-      alt
-      gatsbyImageData
-    }
-    content {
-      id
-      value
-      label
-      heading
-    }
-    links {
-      id
-      href
-      text
-    }
-  }
-`
