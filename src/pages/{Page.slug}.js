@@ -51,6 +51,7 @@ export const query = graphql`
         ...PageSectionContent
         ...HomepageHeroContent
         ...HomepageCtaContent
+        ...AboutLeadershipContent
       }
     }
   }

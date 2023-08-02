@@ -68,8 +68,8 @@ exports.createSchemaCustomization = async ({ actions }) => {
       return {
         resolve(source, args, context, info) {
           const body = source.body
-          const doc = JSON.parse(body.raw)
-          const html = documentToHtmlString(doc)
+          const doc = body && body.raw && JSON.parse(body.raw)
+          const html = doc && documentToHtmlString(doc)
           return html
         },
       }
@@ -402,7 +402,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
       title: String
       description: String
       image: HomepageImage
-      html: String!
+      html: String
       body: JSON
       content: [HomepageBlock]
     }
@@ -413,7 +413,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
       title: String
       description: String
       image: HomepageImage @link(from: "image___NODE")
-      html: String! @richText
+      html: String @richText
       body: JSON
       content: [HomepageBlock] @link(from: "content___NODE")
     }
