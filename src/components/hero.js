@@ -18,15 +18,15 @@ export default function Hero(props) {
     <Section>
       <Container>
         <Flex gap={4} variant="responsive">
-          <Box width="half">
-            {props.image && (
+          {props.image && (
+            <Box width="half">
               <GatsbyImage
                 alt={props.image.alt}
                 image={getImage(props.image.gatsbyImageData)}
               />
-            )}
-          </Box>
-          <Box width="half">
+            </Box>
+          )}
+          <Box>
             <Heading as="h1">
               {props.kicker && <Kicker>{props.kicker}</Kicker>}
               {props.h1}
