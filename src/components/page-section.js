@@ -8,7 +8,6 @@ import StatList from "./stat-list"
 import TestimonialList from "./testimonial-list"
 
 export default function PageSection(props) {
-  console.log("******* in page section", props)
   if(props.type === "Logo List") return <LogoList {...props} />
   if(props.type === "Benefit List") return <BenefitList {...props} />
   if(props.type === "Feature List") return <FeatureList {...props} />

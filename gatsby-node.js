@@ -296,15 +296,6 @@ exports.createSchemaCustomization = async ({ actions }) => {
       image: HomepageImage
       content: [HomepageBlock]
     }
-
-    interface Page implements Node {
-      id: ID!
-      slug: String!
-      title: String
-      description: String
-      image: HomepageImage
-      html: String!
-    }
   `)
 
   // Customization Done by Deven Goratela
@@ -384,6 +375,47 @@ exports.createSchemaCustomization = async ({ actions }) => {
       image: HomepageImage @link(from: "image___NODE")
       author: Author @link(from: "author___NODE")
       category: String
+    }
+
+    type RichTextWithEntriesContent {
+      json: JSON
+      links: ReferenceLinks
+    }
+    type ReferenceAssets {
+      block: [HomepageImage]!
+      hyperlink: [HomepageImage]!
+    }
+    
+    type ReferenceEntries {
+      block: [HomepageBlock]
+      hyperlink: [HomepageBlock]
+      inline: [HomepageBlock]
+    }
+    type ReferenceLinks {
+      assets: ReferenceAssets
+      entries: ReferenceEntries
+    }
+
+    interface Page implements Node {
+      id: ID!
+      slug: String!
+      title: String
+      description: String
+      image: HomepageImage
+      html: String!
+      body: JSON
+      content: [HomepageBlock]
+    }
+
+    type ContentfulPage implements Node & Page {
+      id: ID!
+      slug: String!
+      title: String
+      description: String
+      image: HomepageImage @link(from: "image___NODE")
+      html: String! @richText
+      body: JSON
+      content: [HomepageBlock] @link(from: "content___NODE")
     }
 
   `)
@@ -560,6 +592,7 @@ exports.createSchemaCustomization = async ({ actions }) => {
       image: HomepageImage @link(from: "image___NODE")
       content: [HomepageBlock] @link(from: "content___NODE")
     }
+
   `)
 
   // Layout types
@@ -591,17 +624,6 @@ exports.createSchemaCustomization = async ({ actions }) => {
     }
   `)
 
-  // Page types
-  actions.createTypes(/* GraphQL */ `
-    type ContentfulPage implements Node & Page {
-      id: ID!
-      slug: String!
-      title: String
-      description: String
-      image: HomepageImage @link(from: "image___NODE")
-      html: String! @richText
-    }
-  `)
 }
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
